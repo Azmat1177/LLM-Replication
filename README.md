@@ -19,7 +19,7 @@ aggregate agreement rates are an unsound proxy for annotation validity.
 
 This work builds on the dataset and expert annotations of:
 
-> Salzano et al. (2026). *[reference study title]*. Empirical Software Engineering.
+> Salzano et al. (2026). *Bridging the gap: a comparative study of academic and developer approaches to smart contract vulnerabilities*. Empirical Software Engineering.
 > DOI: 10.1007/s10664-025-10780-5
 > Replication package: https://zenodo.org/records/17105939
 
