@@ -235,8 +235,8 @@ conclusions.
   model's non-aligned pool size from Task B, a model with a larger non-aligned pool
   will mechanically surface more "novel" strategies.
 
-- **`rebuild_diffs.py` backup file.** The script backs up the pre-repair JSONL as
-  `raw_commits_with_diffs.jsonl.http401_backup` before overwriting it. This is a
+- **`rebuild_diffs.py`** The script backs up the pre-repair JSONL as
+  `raw_commits_with_diffs.jsonl` before overwriting it. This is a
   working artefact of a single machine's repair run, not a deliverable, exclude it
   from any published copy of this package.
 
