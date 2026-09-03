@@ -34,8 +34,7 @@ original dataset should be obtained from the link above.
 
 ```
 .
-├── README.md                       this file
-├── verify_paper_claims.py          
+├── README.md                       this file         
 ├── requirements.txt                
 │
 ├── scripts/               the evaluation pipeline
