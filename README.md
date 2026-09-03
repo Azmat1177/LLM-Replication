@@ -63,7 +63,7 @@ original dataset should be obtained from the link above.
 
 `<model>` is one of: `7b`, `14b`, `qwen32b`, `deepseek`, `deepseek32b`, `deepseek70b`.
 
-**Important — where this needs to live.** `config_00.py` hardcodes its working
+**where this needs to live.** `config_00.py` is working
 directories to `~/smart-contract-eval/{repo,data,results,logs}`, resolved from the
 user's home directory, not from wherever this package is cloned. Either clone this
 package directly to `~/smart-contract-eval/`, or copy `scripts/` into
@@ -87,7 +87,7 @@ first time a script runs.
 All models are Q4_K_M quantised and served locally via Ollama. No commercial API is
 used. Sampling is **per task**, not global: classification and adherence (Tasks A, B)
 run Qwen greedily at T=0.0; scoring, discovery, and scanning (Tasks C, D, E) run at
-T=0.1. DeepSeek-R1 runs at T=0.6 throughout with a 2048-token budget — its `<think>`
+T=0.1. DeepSeek-R1 runs at T=0.6 throughout with a 2048-token budget, its `<think>`
 reasoning traces are counted against the generation budget, and a smaller budget
 truncates the terminating JSON, producing spurious parse failures. See the paper's
 Implementation section for the full per-task configuration table.
@@ -115,7 +115,7 @@ Implementation section for the full per-task configuration table.
 
 ### 5.2 Get the dataset
 
-A Zenodo record page is not a git repository — `git clone` against it will fail
+A Zenodo record page is not a git repository, `git clone` against it will fail
 with "repository not found." Download the record's files instead:
 
 ```bash
@@ -150,19 +150,15 @@ and McNemar's test).
 
 ## 6. Reproducing the study
 
-### 6.1 Quickest path: verify the published numbers
+### 6.1 verify the published numbers
 
 The raw model outputs are included, so you can confirm every claim in the paper
 **without re-running any inference**:
 
-```bash
-python3 verify_paper_claims.py --data data --scripts scripts/
-```
-
-This re-derives, from the raw JSONL files, every number in the paper — dataset counts,
+This re-derives, from the raw JSONL files, every number in the paper, dataset counts,
 all six models' RQ1-RQ5 results, the bootstrap-independent statistics, the McNemar
 shared-set accounting, the RQ3 distinct-score counts, the RQ4 normalised rates and the
-27-strategy arithmetic, and the per-task configuration — and prints PASS/FAIL for each.
+27-strategy arithmetic, and the per-task configuration, and prints PASS/FAIL for each.
 It exits 0 when all checks pass.
 
 ### 6.2 Re-running inference from scratch
@@ -171,7 +167,7 @@ It exits 0 when all checks pass.
 cd scripts/
 
 # 0. (only if data/raw_commits_with_diffs.jsonl or data/novel_fixes.jsonl are
-#    missing — this package ships them pre-built) rebuild the dataset JSONL
+#    missing, this package ships them pre-built) rebuild the dataset JSONL
 #    from the raw Zenodo files:
 python3 02_load_dataset.py
 
@@ -236,12 +232,12 @@ conclusions.
 
 - **Cross-model RQ4 comparisons.** Raw "genuinely new strategy" counts from
   `07_discover.py` are only comparable across models after normalising by each
-  model's non-aligned pool size from Task B — a model with a larger non-aligned pool
+  model's non-aligned pool size from Task B, a model with a larger non-aligned pool
   will mechanically surface more "novel" strategies.
 
 - **`rebuild_diffs.py` backup file.** The script backs up the pre-repair JSONL as
   `raw_commits_with_diffs.jsonl.http401_backup` before overwriting it. This is a
-  working artefact of a single machine's repair run, not a deliverable — exclude it
+  working artefact of a single machine's repair run, not a deliverable, exclude it
   from any published copy of this package.
 
 ---
