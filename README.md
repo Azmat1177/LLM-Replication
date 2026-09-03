@@ -93,7 +93,7 @@ truncates the terminating JSON, producing spurious parse failures. See the paper
 Implementation section for the full per-task configuration table.
 
 > The paper's headline six-model comparison and kappa figures cover `7b`,
-> `14b`, `qwen32b`, `deepseek`, and `deepseek32b`. `deepseek70b` is included
+> `14b`, `qwen32b`, `deepseek`, `deepseek32b` and `deepseek70b` is included
 ---
 
 ## 5. Requirements and setup
