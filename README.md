@@ -247,7 +247,6 @@ conclusions.
 
 ## 9. License
 
-- **Code** (`scripts/`, `verify_paper_claims.py`): MIT License.
 - **Derived data** (`data/`): CC BY 4.0, inheriting the terms of the reference dataset
   (Salzano et al., https://zenodo.org/records/17105939).
 
