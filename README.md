@@ -5,11 +5,11 @@ This is a methodological replication study: We replicate the human-expert annota
 whether large language models can validly substitute for human annotators in empirical
 software engineering. Using the same 364 real Solidity vulnerability-fixing commits and
 the same expert ground truth, we evaluate six models on five tasks and measure
-agreement with **chance-corrected** statistics (Cohen's kappa) rather than raw rates.
+agreement with chance-corrected statistics (Cohen's kappa) rather than raw rates.
 
-The headline finding is a **dissociation**: LLMs match or exceed human inter-rater
-reliability on convergent *classification* (kappa up to 0.946 vs. a human 0.72), but
-fail on relational *adherence judgement* (kappa plateaus at approx. 0.27 vs. a human
+The headline finding is a dissociation: LLMs match or exceed human inter-rater
+reliability on convergent classification (kappa up to 0.946 vs. a human 0.72), but
+fail on relational adherence judgement (kappa plateaus at approx. 0.27 vs. a human
 0.77), and this failure does not improve with model scale. We further show that
 aggregate agreement rates are an unsound proxy for annotation validity.
 
