@@ -25,7 +25,7 @@ This work builds on the dataset and expert annotations of:
 
 The 364-commit corpus, the DASP-10 consensus labels, the adherence flags, and the
 nine category-level remediation strategies in reference Table 2 originate there. We
-redistribute only the derived artefacts required to reproduce our analysis; the
+redistribute only the derived artefacts required to reproduce our analysis, the
 original dataset should be obtained from the link above.
 
 ---
@@ -86,7 +86,7 @@ first time a script runs.
 
 All models are Q4_K_M quantised and served locally via Ollama. No commercial API is
 used. Sampling is **per task**, not global: classification and adherence (Tasks A, B)
-run Qwen greedily at T=0.0; scoring, discovery, and scanning (Tasks C, D, E) run at
+run Qwen greedily at T=0.0, scoring, discovery, and scanning (Tasks C, D, E) run at
 T=0.1. DeepSeek-R1 runs at T=0.6 throughout with a 2048-token budget, its `<think>`
 reasoning traces are counted against the generation budget, and a smaller budget
 truncates the terminating JSON, producing spurious parse failures. See the paper's
@@ -111,7 +111,7 @@ Implementation section for the full per-task configuration table.
   ollama pull deepseek-r1:70b    
   ```
 - A CUDA GPU is recommended. The full 6-model x 5-task matrix over 364 commits
-  completes in under three hours on a single GPU; CPU execution is possible but slow.
+  completes in under three hours on a single GPU, CPU execution is possible but slow.
 
 ### 5.2 Get the dataset
 
@@ -127,13 +127,13 @@ cd ~/smart-contract-eval/repo
 
 # Option B — command line, via the Zenodo REST API:
 curl -s https://zenodo.org/api/records/17105939 \
-  | python3 -c "import json,sys,urllib.request; \
-      files=json.load(sys.stdin)['files']; \
+  | python3 -c "import json,sys,urllib.request, \
+      files=json.load(sys.stdin)['files'], \
       [urllib.request.urlretrieve(f['links']['self'], f['key']) for f in files]"
 ```
 
 Confirm you now have `relevant_commits.csv`, `new_fixes.json`, and
-`mining/commit_post_fix.csv` (needed by the diff-rebuild step, §6.2).
+`mining/commit_post_fix.csv` (needed by the diff-rebuild step).
 
 ### 5.3 Python dependencies
 
@@ -175,7 +175,7 @@ python3 02_load_dataset.py
 python3 rebuild_diffs.py
 
 # 2. run each task for each model 
-for M in 7b 14b qwen32b deepseek deepseek32b deepseek70b; do
+for M in 7b 14b qwen32b deepseek deepseek32b deepseek70b, do
   python3 04_classify.py         --model $M
   python3 05_compare_fixes.py    --model $M
   python3 06_eval_novel_fixes.py --model $M
@@ -201,7 +201,7 @@ follow-up, noise-filtered report: `python3 10_independence_vuln_report.py -i
 
 ## 7. Notes on reproducibility and known conventions
 
-These are documented so that a re-runner is not surprised; none affects the study's
+These are documented so that a re-runner is not surprised, none affects the study's
 conclusions.
 
 - **Determinism.** Tasks A and B run Qwen at T=0.0 (greedy). Re-running Task B for
@@ -212,9 +212,9 @@ conclusions.
 - **Duplicate commit hashes.** The reference corpus contains 29 records whose commit
   hash duplicates another (the original mining deduplicated only within a repository,
   so commits mirrored across repositories coexist). Rate and kappa are computed over
-  all 364 records; the pairwise McNemar tests key on the commit hash and therefore
+  all 364 records, the pairwise McNemar tests key on the commit hash and therefore
   operate on the 335 unique hashes. For the deterministic Qwen models, duplicated
-  hashes receive identical decisions; for the stochastic DeepSeek models, 10 (R1-7B)
+  hashes receive identical decisions, for the stochastic DeepSeek models, 10 (R1-7B)
   and 5 (R1-32B) duplicate pairs received differing decisions, resolved last-write-wins.
 
 - **Guideline granularity.** Task B supplies the reference study's nine category-level
@@ -223,7 +223,7 @@ conclusions.
   the paper.
 
 - **Label normalisation.** `raw_commits_with_diffs.jsonl` carries category strings in
-  mixed case (e.g. `Reentrancy` and `reentrancy`); the pipeline canonicalises these to
+  mixed case (e.g. `Reentrancy` and `reentrancy`), the pipeline canonicalises these to
   the DASP-10 labels before scoring. Accuracy is computed over the 352 commits carrying
   a valid label (364 total less 12 annotated *Not Relevant*).
 
