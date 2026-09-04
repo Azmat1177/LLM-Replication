@@ -186,7 +186,7 @@ python3 09_report_statistical.py --models 7b 14b qwen32b deepseek deepseek32b
 ```
 
 `model_config.py` is the single source of truth for which model keys the pipeline
-knows how to run — check it before assuming the five keys above are exhaustive,
+knows how to run, check it before assuming the five keys above are exhaustive,
 especially if this package has been extended since this README was written. To
 run every registered model without hardcoding the list:
 
@@ -199,13 +199,13 @@ for M in $(python3 -c "import model_config as mc; print(' '.join(mc.MODELS.keys(
 done
 ```
 
-(Adjust the one-liner to however `model_config.py` actually exposes its registry —
-dict, list, or function — check the file first.)
+(Adjust the one-liner to however `model_config.py` actually exposes its registry,
+dict, list, or function, check the file first.)
 
 Every task is idempotent: outputs are keyed by commit hash and deduplicated on restart,
 so an interrupted run resumes without double-counting. Task scripts support `--fresh`
 (discard that model's existing output and start over) and `--sample N` (process only
-the first N commits, useful for a smoke test) — confirm via each script's `--help`
+the first N commits, useful for a smoke test), confirm via each script's `--help`
 that these flags exist and behave as expected for your checkout before depending on
 them.
 
@@ -258,15 +258,15 @@ conclusions.
 
 ---
 
-## 8. Before you trust any output
+## 8. Before output
 
 - Confirm the version of `model_config.py`, `config_00.py`, and the task scripts
-  you actually ran matches the version you intend to report on — via `git status`,
+  you actually ran matches the version you intend to report on, via `git status`,
   `git log -1`, or file modification timestamps if you have multiple checkouts or
   have made local changes.
 - If a model is added to or removed from `model_config.py`, confirm every
   downstream script that lists models by name (the report scripts above, or any
-  follow-up analysis) has been updated to match — a model registered in
+  follow-up analysis) has been updated to match, a model registered in
   `model_config.py` but missing from a report script's `--models` list will
   silently not appear in that report.
 - Re-running a script with the same inputs and the same model is idempotent for
@@ -274,7 +274,7 @@ conclusions.
   (T>0) configurations. Check the sampling configuration in `config_00.py` /
   `config_deepseek.py` before treating two runs as directly comparable.
 - Before running anything, open `config_00.py` and confirm the paths it resolves
-  match your actual directory layout (Section 3) — don't assume.
+  match your actual directory layout, don't assume.
 
 ---
 
