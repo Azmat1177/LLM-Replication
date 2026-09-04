@@ -1,16 +1,8 @@
 ## 1. What this study does
 
-This is a methodological replication study: We replicate the human-expert annotation study of Salzano et al. (2026) to test
-whether large language models can validly substitute for human annotators in empirical
-software engineering. Using the same 364 real Solidity vulnerability-fixing commits and
-the same expert ground truth, we evaluate five models on five tasks and measure
-agreement with chance-corrected statistics (Cohen's kappa) rather than raw rates.
+This is a methodological replication study: We replicate the human-expert annotation study of Salzano et al. (2026) to test whether large language models can validly substitute for human annotators in empirical software engineering. Using the same 364 real Solidity vulnerability-fixing commits and the same expert ground truth, we evaluate five models on five tasks and measure agreement with chance-corrected statistics (Cohen's kappa) rather than raw rates.
 
-The headline finding is a dissociation: LLMs match or exceed human inter-rater
-reliability on convergent classification (kappa up to 0.946 vs. a human 0.72), but
-fail on relational adherence judgement (kappa plateaus at approx. 0.27 vs. a human
-0.77), and this failure does not improve with model scale. We further show that
-aggregate agreement rates are an unsound proxy for annotation validity.
+The headline finding is a dissociation: LLMs match or exceed human inter-rater reliability on convergent classification (kappa up to 0.946 vs human 0.72), but fail on relational adherence judgement (kappa plateaus at approx. 0.27 vs human 0.77), and this failure does not improve with model scale. We further show that aggregate agreement rates are an unsound proxy for annotation validity.
 
 ---
 
@@ -22,10 +14,7 @@ This work builds on the dataset and expert annotations of:
 > DOI: 10.1007/s10664-025-10780-5
 > Replication package: https://zenodo.org/records/17105939
 
-The 364-commit corpus, the DASP-10 consensus labels, the adherence flags, and the
-nine category-level remediation strategies in reference Table 2 originate there. We
-redistribute only the derived artefacts required to reproduce our analysis, the
-original dataset should be obtained from the link above.
+The 364-commit corpus, the DASP-10 consensus labels, the adherence flags, and the nine category-level remediation strategies are in reference source Table 2. We redistribute only the derived artefacts required to reproduce our analysis, the original dataset should be obtained from the link above.
 
 ---
 
@@ -62,7 +51,7 @@ original dataset should be obtained from the link above.
 
 `<model>` is one of: `7b`, `14b`, `qwen32b`, `deepseek`, `deepseek32b`.
 
-**where this needs to live.** `config_00.py` is working
+**where this is needed.** `config_00.py` is working
 directories to `~/smart-contract-eval/{repo,data,results,logs}`, resolved from the
 user's home directory, not from wherever this package is cloned. Either clone this
 package directly to `~/smart-contract-eval/`, or copy `scripts/` into
@@ -82,16 +71,10 @@ first time a script runs.
 | `deepseek`     | DeepSeek-R1-7B       | 7 B    | reasoning | 0.6   | 2048        |
 | `deepseek32b`  | DeepSeek-R1-32B      | 32 B   | reasoning | 0.6   | 2048        |
 
-All models are Q4_K_M quantised and served locally via Ollama. No commercial API is
-used. Sampling is **per task**, not global: classification and adherence (Tasks A, B)
-run Qwen greedily at T=0.0, scoring, discovery, and scanning (Tasks C, D, E) run at
-T=0.1. DeepSeek-R1 runs at T=0.6 throughout with a 2048-token budget, its `<think>`
-reasoning traces are counted against the generation budget, and a smaller budget
-truncates the terminating JSON, producing spurious parse failures. See the paper's
-Implementation section for the full per-task configuration table.
+All models are Q4_K_M quantised and served locally via Ollama. No commercial API is used. Sampling is per task, not global: classification and adherence (Tasks A, B) run Qwen greedily at T=0.0, scoring, discovery, and scanning (Tasks C, D, E) run at T=0.1. DeepSeek-R1 runs at T=0.6 throughout with a 2048-token budget, its `<think>` reasoning traces are counted against the generation budget, and a smaller budget truncates the terminating JSON, producing spurious parse failures. See the paper's Implementation section for the full per-task configuration table.
 
 > The paper's headline five-model comparison and kappa figures cover `7b`,
-> `14b`, `qwen32b`, `deepseek` and `deepseek32b` is included
+> `14b`, `qwen32b`, `deepseek` and `deepseek32b` are included
 ---
 
 ## 5. Requirements and setup
@@ -129,8 +112,7 @@ curl -s https://zenodo.org/api/records/17105939 \
       [urllib.request.urlretrieve(f['links']['self'], f['key']) for f in files]"
 ```
 
-Confirm you now have `relevant_commits.csv`, `new_fixes.json`, and
-`mining/commit_post_fix.csv` (needed by the diff-rebuild step).
+Confirm you now have `relevant_commits.csv`, `new_fixes.json`, and `mining/commit_post_fix.csv` (needed by the diff-rebuild step).
 
 ### 5.3 Python dependencies
 
@@ -147,16 +129,11 @@ and McNemar's test).
 
 ## 6. Reproducing the study
 
-### 6.1 verify the published numbers
+### 6.1 Verify the published numbers
 
-The raw model outputs are included, so you can confirm every claim in the paper
-**without re-running any inference**:
+The raw model outputs are included so that you can confirm every claim in the paper without re-running any inference:
 
-This re-derives, from the raw JSONL files, every number in the paper, dataset counts,
-all five models' RQ1-RQ5 results, the bootstrap-independent statistics, the McNemar
-shared-set accounting, the RQ3 distinct-score counts, the RQ4 normalised rates and the
-27-strategy arithmetic, and the per-task configuration, and prints PASS/FAIL for each.
-It exits 0 when all checks pass.
+This re-derives, from the raw JSONL files, every number in the paper, dataset counts, all five models' RQ1-RQ5 results, the bootstrap-independent statistics, the McNemar shared-set accounting, the RQ3 distinct-score counts, the RQ4 normalised rates and the 27-strategy arithmetic, and the per-task configuration, and prints PASS/FAIL for each. It exits 0 when all checks pass.
 
 ### 6.2 Re-running inference from scratch
 
@@ -185,10 +162,7 @@ python3 09_report_descriptive.py --models 7b 14b qwen32b deepseek deepseek32b
 python3 09_report_statistical.py --models 7b 14b qwen32b deepseek deepseek32b
 ```
 
-`model_config.py` is the single source of truth for which model keys the pipeline
-knows how to run, check it before assuming the five keys above are exhaustive,
-especially if this package has been extended since this README was written. To
-run every registered model without hardcoding the list:
+`model_config.py` is the single source of truth for which model keys the pipeline knows how to run, check it before assuming the five keys above are exhaustive, especially if this package has been extended since this README was written. To run every registered model without hardcoding the list:
 
 ```bash
 for M in $(python3 -c "import model_config as mc; print(' '.join(mc.MODELS.keys()))"); do
@@ -199,88 +173,45 @@ for M in $(python3 -c "import model_config as mc; print(' '.join(mc.MODELS.keys(
 done
 ```
 
-(Adjust the one-liner to however `model_config.py` actually exposes its registry,
-dict, list, or function, check the file first.)
+(Adjust the one-liner to however `model_config.py` actually exposes its registry, dict, list, or function, check the file first.)
 
-Every task is idempotent: outputs are keyed by commit hash and deduplicated on restart,
-so an interrupted run resumes without double-counting. Task scripts support `--fresh`
-(discard that model's existing output and start over) and `--sample N` (process only
-the first N commits, useful for a smoke test), confirm via each script's `--help`
-that these flags exist and behave as expected for your checkout before depending on
-them.
+Every task is idempotent: outputs are keyed by commit hash and deduplicated on restart, so an interrupted run resumes without double-counting. Task scripts support `--fresh` (discard that model's existing output and start over) and `--sample N` (process only the first N commits, useful for a smoke test), confirm via each script's `--help` that these flags exist and behave as expected for your checkout before depending on them.
 
-`08_independent_scan.py` prints, on completion, the command for an optional
-follow-up, noise-filtered report: `python3 10_independence_vuln_report.py -i
-<scan file> -o <report path> -m <model>`.
+`08_independent_scan.py` prints, on completion, the command for an optional follow-up, noise-filtered report: `python3 10_independence_vuln_report.py -i <scan file> -o <report path> -m <model>`.
 
 ---
 
 ## 7. Notes on reproducibility and known conventions
 
-These are documented so that a re-runner is not surprised, none affects the study's
-conclusions.
+These are documented so that a re-runner is not surprised, none affects the study's conclusions.
 
-- **Determinism.** Tasks A and B run Qwen at T=0.0 (greedy). Re-running Task B for
-  Qwen-14B reproduces a byte-identical partition, confirming the serving stack
-  introduces no nondeterminism. This does not test sampling variance, which does not
-  arise at T=0.0. The DeepSeek models run at T=0.6 and are therefore stochastic.
+- **Determinism.** Tasks A and B run Qwen at T=0.0. Re-running Task B for Qwen-14B reproduces a byte-identical partition, confirming the serving stack introduces no nondeterminism. This does not test sampling variance, which does not arise at T=0.0. The DeepSeek models run at T=0.6 and are therefore stochastic.
 
-- **Duplicate commit hashes.** The reference corpus contains 29 records whose commit
-  hash duplicates another (the original mining deduplicated only within a repository,
-  so commits mirrored across repositories coexist). Rate and kappa are computed over
-  all 364 records, the pairwise McNemar tests key on the commit hash and therefore
-  operate on the 335 unique hashes. For the deterministic Qwen models, duplicated
-  hashes receive identical decisions, for the stochastic DeepSeek models, 10 (R1-7B)
-  and 5 (R1-32B) duplicate pairs received differing decisions, resolved last-write-wins.
+- **Duplicate commit hashes.** The reference corpus contains 29 records whose commit hash duplicates another (the original mining deduplicated only within a repository, so commits mirrored across repositories coexist). Rate and kappa are computed over all 364 records, the pairwise McNemar tests key on the commit hash and therefore operate on the 335 unique hashes.
 
-- **Guideline granularity.** Task B supplies the reference study's nine category-level
-  remediation strategies (their Table 2), which condense their catalogue of 31
-  individual guidelines. This is discussed as a construct-validity consideration in
-  the paper.
+- **Guideline granularity.** Task B supplies the reference study's nine category-level remediation strategies in Table 2, which condense their catalogue of 31 individual guidelines. This is discussed as a construct-validity consideration in the paper.
 
-- **Label normalisation.** `raw_commits_with_diffs.jsonl` carries category strings in
-  mixed case (e.g. `Reentrancy` and `reentrancy`), the pipeline canonicalises these to
-  the DASP-10 labels before scoring. Accuracy is computed over the 352 commits carrying
-  a valid label (364 total less 12 annotated *Not Relevant*).
+- **Label normalisation.** `raw_commits_with_diffs.jsonl` carries category strings in mixed case (e.g. `Reentrancy` and `reentrancy`), the pipeline canonicalises these to the DASP-10 labels before scoring. Accuracy is computed over the 352 commits carrying a valid label (364 total less 12 annotated *Not Relevant*).
 
-- **Standard deviations** in the quality-scoring table are sample standard deviations
-  (ddof=1).
+- **Standard deviations** in the quality-scoring table are sample standard deviations (ddof=1).
 
-- **Cross-model RQ4 comparisons.** Raw "genuinely new strategy" counts from
-  `07_discover.py` are only comparable across models after normalising by each
-  model's non-aligned pool size from Task B, a model with a larger non-aligned pool
-  will mechanically surface more "novel" strategies.
+- **Cross-model RQ4 comparisons.** Raw "genuinely new strategy" counts from `07_discover.py` are only comparable across models after normalising by each model's non-aligned pool size from Task B, a model with a larger non-aligned pool will mechanically surface more "novel" strategies.
 
-- **`rebuild_diffs.py`** The script backs up the pre-repair JSONL as
-  `raw_commits_with_diffs.jsonl` before overwriting it. This is a
-  working artefact of a single machine's repair run, not a deliverable, exclude it
-  from any published copy of this package.
+- **`rebuild_diffs.py`** The script backs up the pre-repair JSONL as `raw_commits_with_diffs.jsonl` before overwriting it. This is a working artefact of a single machine's repair run, not a deliverable, exclude it from any published copy of this package.
 
 ---
 
 ## 8. Before output
 
-- Confirm the version of `model_config.py`, `config_00.py`, and the task scripts
-  you actually ran matches the version you intend to report on, via `git status`,
-  `git log -1`, or file modification timestamps if you have multiple checkouts or
-  have made local changes.
-- If a model is added to or removed from `model_config.py`, confirm every
-  downstream script that lists models by name (the report scripts above, or any
-  follow-up analysis) has been updated to match, a model registered in
-  `model_config.py` but missing from a report script's `--models` list will
-  silently not appear in that report.
-- Re-running a script with the same inputs and the same model is idempotent for
-  deterministic (T=0.0) configurations, and will differ run-to-run for stochastic
-  (T>0) configurations. Check the sampling configuration in `config_00.py` /
-  `config_deepseek.py` before treating two runs as directly comparable.
-- Before running anything, open `config_00.py` and confirm the paths it resolves
-  match your actual directory layout, don't assume.
+- Confirm the version of `model_config.py`, `config_00.py`, and the task scripts you actually ran matches the version you intend to report on, via `git status`, `git log -1`, or file modification timestamps if you have multiple checkouts or have made local changes.
+- If a model is added to or removed from `model_config.py`, confirm every downstream script that lists models by name (the report scripts above, or any follow-up analysis) has been updated to match, a model registered in `model_config.py` but missing from a report script's `--models` list will silently not appear in that report.
+- Re-running a script with the same inputs and the same model is idempotent for deterministic (T=0.0) configurations, and will differ run-to-run for stochastic (T>0) configurations. Check the sampling configuration in `config_00.py` / `config_deepseek.py` before treating two runs as directly comparable.
+- Before running anything, open `config_00.py` and confirm the paths it resolves match your actual directory layout.
 
 ---
 
 ## 9. License
 
-- **Derived data** (`data/`): CC BY 4.0, inheriting the terms of the reference dataset
-  (Salzano et al., https://zenodo.org/records/17105939).
+- **Derived data** (`data/`): CC BY 4.0, inheriting the terms of the reference dataset (Salzano et al., https://zenodo.org/records/17105939).
 
 ---
