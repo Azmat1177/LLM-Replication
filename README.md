@@ -1,10 +1,9 @@
-
 ## 1. What this study does
 
 This is a methodological replication study: We replicate the human-expert annotation study of Salzano et al. (2026) to test
 whether large language models can validly substitute for human annotators in empirical
 software engineering. Using the same 364 real Solidity vulnerability-fixing commits and
-the same expert ground truth, we evaluate six models on five tasks and measure
+the same expert ground truth, we evaluate five models on five tasks and measure
 agreement with chance-corrected statistics (Cohen's kappa) rather than raw rates.
 
 The headline finding is a dissociation: LLMs match or exceed human inter-rater
@@ -61,7 +60,7 @@ original dataset should be obtained from the link above.
     └── independent_scan_<model>.jsonl      
 ```
 
-`<model>` is one of: `7b`, `14b`, `qwen32b`, `deepseek`, `deepseek32b`, `deepseek70b`.
+`<model>` is one of: `7b`, `14b`, `qwen32b`, `deepseek`, `deepseek32b`.
 
 **where this needs to live.** `config_00.py` is working
 directories to `~/smart-contract-eval/{repo,data,results,logs}`, resolved from the
@@ -82,7 +81,6 @@ first time a script runs.
 | `qwen32b`      | Qwen2.5-Coder-32B    | 32 B   | code      | 0.0/0.1 | task-dependent |
 | `deepseek`     | DeepSeek-R1-7B       | 7 B    | reasoning | 0.6   | 2048        |
 | `deepseek32b`  | DeepSeek-R1-32B      | 32 B   | reasoning | 0.6   | 2048        |
-| `deepseek70b`  | DeepSeek-R1-70B      | 70 B   | reasoning | 0.6   | 2048        |
 
 All models are Q4_K_M quantised and served locally via Ollama. No commercial API is
 used. Sampling is **per task**, not global: classification and adherence (Tasks A, B)
@@ -92,8 +90,8 @@ reasoning traces are counted against the generation budget, and a smaller budget
 truncates the terminating JSON, producing spurious parse failures. See the paper's
 Implementation section for the full per-task configuration table.
 
-> The paper's headline six-model comparison and kappa figures cover `7b`,
-> `14b`, `qwen32b`, `deepseek`, `deepseek32b` and `deepseek70b` is included
+> The paper's headline five-model comparison and kappa figures cover `7b`,
+> `14b`, `qwen32b`, `deepseek` and `deepseek32b` is included
 ---
 
 ## 5. Requirements and setup
@@ -101,16 +99,15 @@ Implementation section for the full per-task configuration table.
 ### 5.1 Software
 
 - Python 3.12+
-- [Ollama](https://ollama.com) with the six models pulled:
+- [Ollama](https://ollama.com) with the five models pulled:
   ```bash
   ollama pull qwen2.5-coder:7b
   ollama pull qwen2.5-coder:14b
   ollama pull qwen2.5-coder:32b
   ollama pull deepseek-r1:7b
   ollama pull deepseek-r1:32b
-  ollama pull deepseek-r1:70b    
   ```
-- A CUDA GPU is recommended. The full 6-model x 5-task matrix over 364 commits
+- A CUDA GPU is recommended. The full 5-model x 5-task matrix over 364 commits
   completes in under three hours on a single GPU, CPU execution is possible but slow.
 
 ### 5.2 Get the dataset
@@ -156,7 +153,7 @@ The raw model outputs are included, so you can confirm every claim in the paper
 **without re-running any inference**:
 
 This re-derives, from the raw JSONL files, every number in the paper, dataset counts,
-all six models' RQ1-RQ5 results, the bootstrap-independent statistics, the McNemar
+all five models' RQ1-RQ5 results, the bootstrap-independent statistics, the McNemar
 shared-set accounting, the RQ3 distinct-score counts, the RQ4 normalised rates and the
 27-strategy arithmetic, and the per-task configuration, and prints PASS/FAIL for each.
 It exits 0 when all checks pass.
@@ -175,7 +172,7 @@ python3 02_load_dataset.py
 python3 rebuild_diffs.py
 
 # 2. run each task for each model 
-for M in 7b 14b qwen32b deepseek deepseek32b deepseek70b, do
+for M in 7b 14b qwen32b deepseek deepseek32b, do
   python3 04_classify.py         --model $M
   python3 05_compare_fixes.py    --model $M
   python3 06_eval_novel_fixes.py --model $M
@@ -183,9 +180,9 @@ for M in 7b 14b qwen32b deepseek deepseek32b deepseek70b, do
   python3 08_independent_scan.py --model $M
 done
 
-# 3. generate reports across all six models 
-python3 09_report_descriptive.py --models 7b 14b qwen32b deepseek deepseek32b deepseek70b
-python3 09_report_statistical.py --models 7b 14b qwen32b deepseek deepseek32b deepseek70b
+# 3. generate reports across all five models 
+python3 09_report_descriptive.py --models 7b 14b qwen32b deepseek deepseek32b
+python3 09_report_statistical.py --models 7b 14b qwen32b deepseek deepseek32b
 ```
 
 Every task is idempotent: outputs are keyed by commit hash and deduplicated on restart,
@@ -251,5 +248,3 @@ conclusions.
   (Salzano et al., https://zenodo.org/records/17105939).
 
 ---
-
-
